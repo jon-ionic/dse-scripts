@@ -1,0 +1,25 @@
+name: Deploy Self-Hosted Live Update
+
+on:
+  schedule:
+    - cron: '0 15 * * *'
+  push:
+    branches:
+    - main
+
+jobs:
+  web-build:
+    runs-on: ubuntu-latest
+
+    env:
+      IONIC_TOKEN: ${{ secrets.IONIC_TOKEN }}
+    
+    steps:
+    - name: checkout repo
+      uses: actions/checkout@v4
+
+    - name: install Appflow CLI
+      run: curl -sL https://ionic.io/get-appflow-cli | bash
+    
+    - name: run script
+      run: python ./scripts/validate_ips.py
